@@ -22,12 +22,12 @@ const OrderConfirmation = ({ order }: { order: Order }) => {
 
   const qrCodePix = QrCodePix({
     version: '01',
-    key: '+5586999533190', //or any PIX key
-    name: 'Ana Gabriella Rocha Braga',
+    key: '+5586999428986', //or any PIX key
+    name: 'N-Nature',
     city: 'Teresina',
     transactionId: order.id,
-    message: `Compra na AG Joias. Pedido: ${order.id}`,
-    cep: '64008364',
+    message: `Compra em N-Nature. Pedido: ${order.id}`,
+    cep: '64002210',
     value: order.delivery ? order.amount + order.delivery.freight : order.amount,
   });
 
