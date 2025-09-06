@@ -10,13 +10,22 @@ const ProductList = ({ products }: { products: Product[] }) => {
   const [sortType, setSortType] = useState<"alpha-asc" | "alpha-desc" | "price-asc" | "price-desc">("alpha-asc");
   const [openSort, setOpenSort] = useState(false);
 
-  // Funções de ordenação
-  const sortFunctions = {
-    "alpha-asc": (a: Product, b: Product) => a.title.localeCompare(b.title),
-    "alpha-desc": (a: Product, b: Product) => b.title.localeCompare(a.title),
-    "price-asc": (a: Product, b: Product) => a.variants[0].price - b.variants[0].price,
-    "price-desc": (a: Product, b: Product) => b.variants[0].price - a.variants[0].price,
-  };
+  // Função utilitária para pegar o menor preço de um produto
+const getLowestPrice = (product: Product) => {
+  if (!product.variants || product.variants.length === 0) return Infinity;
+
+  return Math.min(
+    ...product.variants.map(v => v.promotional || v.price)
+  );
+};
+
+const sortFunctions = {
+  "alpha-asc": (a: Product, b: Product) => a.title.localeCompare(b.title),
+  "alpha-desc": (a: Product, b: Product) => b.title.localeCompare(a.title),
+  "price-asc": (a: Product, b: Product) => getLowestPrice(a) - getLowestPrice(b),
+  "price-desc": (a: Product, b: Product) => getLowestPrice(b) - getLowestPrice(a),
+};
+
 
   const getSortedProducts = (list: Product[]) => {
     return [...list].sort(sortFunctions[sortType]);
